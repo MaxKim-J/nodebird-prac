@@ -4,14 +4,17 @@ const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
-const { sequelize } = require('./models');
+const passport = require('passport');
 // 환경변수 파일 불러오기
 require('dotenv').config();
 
 const pageRouter = require('./routes/page');
+const { sequelize } = require('./models');
+const passportConfig = require('./passport');
 
 const app = express();
 sequelize.sync();
+passportConfig(passport);
 
 
 app.set('views', path.join(__dirname, 'views'));
@@ -35,7 +38,13 @@ app.use(session({
   },
 }));
 app.use(flash());
+// 요청에 passport 설정을 심고
+// passport.session() 미들웨어는 req.session객체에 passport 정보 저장
+// 그래서 passport 미들웨어는 express-session 미들웨어보다 뒤에 연결해야 함
+app.use(passport.initialize());
+app.use(passport.session());
 
+// 지금 쿠키=>세션=>인증=>라우터
 app.use('/', pageRouter);
 
 // 에러 핸들러
