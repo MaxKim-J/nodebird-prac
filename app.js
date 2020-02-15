@@ -4,12 +4,15 @@ const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
+const { sequelize } = require('./models');
 // 환경변수 파일 불러오기
 require('dotenv').config();
 
 const pageRouter = require('./routes/page');
 
 const app = express();
+sequelize.sync();
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

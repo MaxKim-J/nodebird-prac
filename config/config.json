@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "maxkim112&",
+    "password": "max112&",
     "database": "nodebird",
     "host": "127.0.0.1",
     "dialect": "mysql"
